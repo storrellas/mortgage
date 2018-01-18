@@ -41,8 +41,20 @@ class Lender:
 			";interest=" + str(self.interest) + \
 			";capital="  + str(self.available)
 
-def getKey(item):
-	return item.interest
+def calc_mortgage_sergi(principal, interest):
+	'''
+        given mortgage loan principal, interest(%) and years to pay
+        calculate and return monthly payment amount
+        '''
+
+        # monthly rate from annual percentage rate
+        interest_rate = interest/12
+        # total number of payments (fixed to 36 months)
+        payment_num = 36
+        # calculate monthly payment
+        payment = principal * \
+            (interest_rate/(1-math.pow((1+interest_rate), (-payment_num))))
+        return payment
 
 
 
@@ -67,28 +79,44 @@ if __name__ == "__main__":
 
 
 	
-	principal = 1000
+	principal = 1010
 
 	print "++++++++++++++++"		
 	captured_lender_list = []
 	principal_local = principal
 	for lender in lender_list:
-		principal_local = principal_local - lender.available
-		if principal_local < 0:
+		if principal_local < lender.available:
+			captured_lender_list.append ( Lender( lender.name, lender.interest, principal_local) )
 			break;
+		else:
+			principal_local = principal_local - lender.available
 		captured_lender_list.append( lender )
 
 	print captured_lender_list
 	print "++++++++++++++++"
 
-	interest_rate = 0.07 /12 
-	payment_num = 36	
-	payment = principal * \
-            (interest_rate/(1-math.pow((1+interest_rate), (-payment_num))))
+	#interest_rate = 0.07 /12 
+	#payment_num = 36	
+	#payment = principal * \
+        #    (interest_rate/(1-math.pow((1+interest_rate), (-payment_num))))
+
+	#interest_rate = 0.07
+	#payment = calc_mortgage_sergi(principal, interest_rate)
+
+	print "-- Summary --"
+	total_payment = 0.0
+	for captured_lender in captured_lender_list:
+		payment = calc_mortgage_sergi(captured_lender.available, captured_lender.interest)
+		print payment
+		total_payment += payment
+
+	print "TOTAL:"
+	print total_payment
 	print payment
-	print interest_rate
-	print payment*36
-	#exit(0)
+	#print interest
+	#print payment*36
+	print total_payment * 36
+	exit(0)
 
 	# mortgage loan principal
 	principal = 1000
