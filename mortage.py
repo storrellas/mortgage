@@ -5,23 +5,7 @@ mortgage_loan_calc1.py
 calculate the monthly payment on a mortgage loan
 tested with Python27 and Python33
 '''
-import math
-import csv
-def calc_mortgage(principal, interest, years):
-	'''
-        given mortgage loan principal, interest(%) and years to pay
-        calculate and return monthly payment amount
-        '''
-        # monthly rate from annual percentage rate
-        interest_rate = interest/(100 * 12)
-        # total number of payments
-        payment_num = years * 12
-        # calculate monthly payment
-        payment = principal * \
-            (interest_rate/(1-math.pow((1+interest_rate), (-payment_num))))
-        return payment
-
-
+import math,csv
 class Lender:
 	name = ""
 	interest = 0.0
@@ -41,7 +25,9 @@ class Lender:
 			";interest=" + str(self.interest) + \
 			";capital="  + str(self.available)
 
-def calc_mortgage_sergi(principal, interest):
+# total number of payments (fixed to 36 months)
+n_payment = 36
+def calc_mortgage(principal, interest):
 	'''
         given mortgage loan principal, interest(%) and years to pay
         calculate and return monthly payment amount
@@ -49,11 +35,10 @@ def calc_mortgage_sergi(principal, interest):
 
         # monthly rate from annual percentage rate
         interest_rate = interest/12
-        # total number of payments (fixed to 36 months)
-        payment_num = 36
+
         # calculate monthly payment
         payment = principal * \
-            (interest_rate/(1-math.pow((1+interest_rate), (-payment_num))))
+            (interest_rate/(1-math.pow((1+interest_rate), (-n_payment))))
         return payment
 
 
@@ -73,49 +58,46 @@ if __name__ == "__main__":
 		#print(row[0])
 		#print(row[0],row[1],row[2],)
 
-	# Sort list by interest
+	# Sort lender_list by interest
 	lender_list.sort(key=lambda x: x.interest)
 	print lender_list
 
 
 	
-	principal = 1010
+	principal = 1000
 
 	print "++++++++++++++++"		
-	captured_lender_list = []
+	selected_lender_list = []
 	principal_local = principal
 	for lender in lender_list:
-		if principal_local < lender.available:
-			captured_lender_list.append ( Lender( lender.name, lender.interest, principal_local) )
+		if principal_local <= lender.available:
+			lender = Lender(lender.name, lender.interest, principal_local)
+			selected_lender_list.append ( lender )
 			break;
-		else:
-			principal_local = principal_local - lender.available
-		captured_lender_list.append( lender )
+		# Substract for next iteration
+		principal_local = principal_local - lender.available
+		selected_lender_list.append( lender )
 
-	print captured_lender_list
+	print selected_lender_list
+	print len(selected_lender_list)
 	print "++++++++++++++++"
 
-	#interest_rate = 0.07 /12 
-	#payment_num = 36	
-	#payment = principal * \
-        #    (interest_rate/(1-math.pow((1+interest_rate), (-payment_num))))
 
-	#interest_rate = 0.07
-	#payment = calc_mortgage_sergi(principal, interest_rate)
+	print "-- Calculations --"
+	total_payment = 0.0
+	average_interest = 0.0
+	for selected_lender in selected_lender_list:
+		payment = calc_mortgage(selected_lender.available, selected_lender.interest)
+		print "payment for " + selected_lender.name +"; payment=" + str(payment)
+		total_payment += payment
+		average_interest += selected_lender.interest
+	average_interest = average_interest / len(selected_lender_list)
 
 	print "-- Summary --"
-	total_payment = 0.0
-	for captured_lender in captured_lender_list:
-		payment = calc_mortgage_sergi(captured_lender.available, captured_lender.interest)
-		print payment
-		total_payment += payment
-
-	print "TOTAL:"
-	print total_payment
-	print payment
-	#print interest
-	#print payment*36
-	print total_payment * 36
+	print "Requested amount: " + str(principal)
+	print "Rate: " + str(average_interest*100) + "%"
+	print "Monthly repayment: " + str(total_payment)
+	print "Total repayment: " + str(total_payment * n_payment)
 	exit(0)
 
 	# mortgage loan principal
