@@ -25,6 +25,33 @@ class Lender:
 			";interest=" + str(self.interest) + \
 			";capital="  + str(self.available)
 
+class LenderCSVReader:
+	
+	filename = ""
+	
+	def __init__(self, filename):
+		self.filename = filename
+		
+		
+		# Read CSV
+		lender_list = []
+		with open('market_data.csv') as csvfile:
+		    readCSV = csv.reader(csvfile, delimiter=',')
+		    data_list = iter(readCSV)
+		    next(data_list)
+		    for row in data_list:
+			lender_list.append( Lender(row[0], float(row[1]), int(row[2]) ) )
+	
+			print(row)
+			#print(row[0])
+			#print(row[0],row[1],row[2],)
+	
+		# Sort lender_list by interest
+		lender_list.sort(key=lambda x: x.interest)
+		print lender_list
+
+	
+
 class LoanCalculator:
 	# total number of payments		
 	n_payment = 36
