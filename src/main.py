@@ -6,7 +6,6 @@ from lender_csv_loader import LenderCSVLoader
 	
 if __name__ == "__main__":
 
-
 	principal = 1000
 	filename = ""
 	# Grab command-line results
