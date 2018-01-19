@@ -48,11 +48,11 @@ class LoanCalculator:
         self.selected_lender_list = []
         for lender in self.lender_list:
             if self.principal <= lender.available:
-                lender = Lender(lender.name, lender.interest, self.principal)
+                lender = Lender(lender.name, lender.interest, principal)
                 self.selected_lender_list.append ( lender )
                 break;
             # Substract for next iteration
-            self.principal = self.principal - lender.available
+            principal = principal - lender.available
             self.selected_lender_list.append( lender )
         return self.selected_lender_list
         

@@ -12,10 +12,10 @@ def caculate_figures( principal, filename ):
 	loan_calculator.calculate_repayment( principal )
 	
 	print "-- Results --"
-	print "Requested amount: " + str(loan_calculator.get_principal())
-	print "Rate: " + str(loan_calculator.get_interest()*100) + "%"
-	print "Monthly repayment: " + str(loan_calculator.get_repayment())
-	print "Total repayment: " + str(loan_calculator.get_total_repayment())
+	print "Requested amount: %.2f Euro" % (loan_calculator.get_principal())
+	print "Rate: %.2f%%" % (loan_calculator.get_interest()*100)
+	print "Monthly repayment: %.2f Euro" % loan_calculator.get_repayment()
+	print "Total repayment: %.2f Euro" % loan_calculator.get_total_repayment()
 	
 
 if __name__ == "__main__":
