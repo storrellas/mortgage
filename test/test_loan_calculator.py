@@ -13,20 +13,6 @@ class TestLoanCalculator(unittest.TestCase):
         self.lender_list.append( Lender("Jane", 0.069, 480) )
         self.lender_list.append( Lender("Mary", 0.104, 170) )
 
-#     def test_upper(self):
-#         self.assertEqual('foo'.upper(), 'FOO')
-# 
-#     def test_isupper(self):
-#         self.assertTrue('FOO'.isupper())
-#         self.assertFalse('Foo'.isupper())
-# 
-#     def test_split(self):
-#         s = 'hello world'
-#         self.assertEqual(s.split(), ['hello', 'world'])
-#         # check that s.split fails when the separator is not a string
-#         with self.assertRaises(TypeError):
-#             s.split(2)
-
     def test_loan_calculator(self):
         
         principal = 1000
