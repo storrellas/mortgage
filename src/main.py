@@ -1,4 +1,4 @@
-import math,csv
+import math,csv,sys
 
 class Lender:
 	''' 
@@ -138,8 +138,14 @@ class LoanCalculator:
 
 if __name__ == "__main__":
 
+
 	principal = 1000
-	filename = "market_data.csv"
+	filename = ""
+	# Grab command-line results
+	if len(sys.argv) >= 2:
+		filename = sys.argv[1]
+	if len(sys.argv) >= 3:
+		principal = float(sys.argv[2])
 
 	# Load Lender CSV 
 	lender_loader = LenderCSVLoader( filename )
