@@ -62,6 +62,9 @@ class LoanCalculator:
         calculate repayment for all lenders
         '''
         
+        if not(principal >= 1000 and principal <= 15000): 
+            raise ValueError("principal exceeds range [1000,15000]")
+        
         self.principal = principal
         # Calculate Selected Lender_list
         self.selected_lender_list = self.calculate_selected_lenders(principal)
@@ -76,6 +79,7 @@ class LoanCalculator:
             self.payment_combined += payment
             self.average_interest += lender.interest
         self.average_interest = self.average_interest / len(self.selected_lender_list)
+        return True
 
     def get_average_interest(self):
         return self.average_interest
