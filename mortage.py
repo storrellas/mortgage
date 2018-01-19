@@ -64,11 +64,17 @@ class LoanCalculator:
 			self.average_interest += lender.interest
 		self.average_interest = self.average_interest / len(self.lender_list)
 
-	def get_average_interest():
+	def get_average_interest(self):
 		return self.average_interest
 
-	def get_repayment():
+	def get_repayment(self):
 		return self.payment_combined
+
+	def get_total_repayment(self):
+		return self.payment_combined * self.n_payment
+
+	def get_interest(self):
+		return self.average_interest
 
 if __name__ == "__main__":
 
@@ -114,9 +120,9 @@ if __name__ == "__main__":
 	loan_calculator = LoanCalculator(selected_lender_list)
 	loan_calculator.calculate_repayment()
 	print "Requested amount: " + str(principal)
-	print "Rate: " + str(loan_calculator.average_interest*100) + "%"
-	print "Monthly repayment: " + str(loan_calculator.payment_combined)
-	print "Total repayment: " + str(loan_calculator.total_payment * loan_calculator.n_payment)
+	print "Rate: " + str(loan_calculator.get_interest()*100) + "%"
+	print "Monthly repayment: " + str(loan_calculator.get_repayment())
+	print "Total repayment: " + str(loan_calculator.get_total_repayment())
 	
 
 
