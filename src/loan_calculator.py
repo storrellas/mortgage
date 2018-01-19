@@ -47,13 +47,19 @@ class LoanCalculator:
         '''
         self.selected_lender_list = []
         for lender in self.lender_list:
-            if self.principal <= lender.available:
+            if principal <= lender.available:
                 lender = Lender(lender.name, lender.interest, principal)
                 self.selected_lender_list.append ( lender )
+                principal = 0
                 break;
             # Substract for next iteration
             principal = principal - lender.available
             self.selected_lender_list.append( lender )
+
+        # Check whether enough funds
+        if principal > 0:
+            self.selected_lender_list = []
+            raise ValueError("not enough funds")
         return self.selected_lender_list
         
 
