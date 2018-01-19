@@ -25,23 +25,44 @@ class Lender:
 			";interest=" + str(self.interest) + \
 			";capital="  + str(self.available)
 
-# total number of payments (fixed to 36 months)
-n_payment = 36
-def calc_mortgage(principal, interest):
-	'''
-        given mortgage loan principal, interest(%) and years to pay
-        calculate and return monthly payment amount
-        '''
+class LoanCalculator:
+	# total number of payments		
+	n_payment = 36
+	lender_list = []
+	
+	# Ouput
+	total_repayment = 0.0
+	average_interest = 0.0
 
-        # monthly rate from annual percentage rate
-        interest_rate = interest/12
+	def __init__(self, lender_list):
+		self.lender_list = lender_list
+		
+	# total number of payments (fixed to 36 months)
+	n_payment = 36
+	def calculate_repayment_per_lender(self, principal, interest):
+		'''
+		given mortgage loan principal, interest(%) and years to pay
+		calculate and return monthly payment amount
+		'''
+		
+		# monthly rate from annual percentage rate
+		interest_rate = interest/12
+		
+		# calculate monthly payment
+		payment = principal * \
+		    (interest_rate/(1-math.pow((1+interest_rate), (-self.n_payment))))
+		return payment
 
-        # calculate monthly payment
-        payment = principal * \
-            (interest_rate/(1-math.pow((1+interest_rate), (-n_payment))))
-        return payment
 
-
+	def calculate_repayment(self):
+		self.total_payment = 0.0
+		self.average_interest = 0.0
+		for lender in self.lender_list:
+			payment = self.calculate_repayment_per_lender(lender.available, lender.interest)
+			print "payment for " + lender.name +"; payment=" + str(payment)
+			self.total_payment += payment
+			self.average_interest += lender.interest
+		self.average_interest = self.average_interest / len(self.lender_list)
 
 if __name__ == "__main__":
 
@@ -83,49 +104,15 @@ if __name__ == "__main__":
 	print "++++++++++++++++"
 
 
-	print "-- Calculations --"
-	total_payment = 0.0
-	average_interest = 0.0
-	for selected_lender in selected_lender_list:
-		payment = calc_mortgage(selected_lender.available, selected_lender.interest)
-		print "payment for " + selected_lender.name +"; payment=" + str(payment)
-		total_payment += payment
-		average_interest += selected_lender.interest
-	average_interest = average_interest / len(selected_lender_list)
-
 	print "-- Summary --"
+	loan_calculator = LoanCalculator(selected_lender_list)
+	loan_calculator.calculate_repayment()
 	print "Requested amount: " + str(principal)
-	print "Rate: " + str(average_interest*100) + "%"
-	print "Monthly repayment: " + str(total_payment)
-	print "Total repayment: " + str(total_payment * n_payment)
-	exit(0)
+	print "Rate: " + str(loan_calculator.average_interest*100) + "%"
+	print "Monthly repayment: " + str(loan_calculator.total_payment)
+	print "Total repayment: " + str(loan_calculator.total_payment * loan_calculator.n_payment)
+	
 
-	# mortgage loan principal
-	principal = 1000
-	# percent annual interest
-	interest = 7.5
-	# years to pay off mortgage
-	years = 30
-	# calculate monthly payment amount
-	monthly_payment = calc_mortgage(principal, interest, years)
-	# calculate total amount paid
-	total_amount = monthly_payment * years * 12
-	# show result ...
-	# {:,} uses the comma as a thousands separator
-	sf = '''\
-	For a {} year mortgage loan of ${:,}
-	at an annual interest rate of {:.2f}%
-	you pay ${:.2f} monthly'''
-	print(sf.format(years, principal, interest, monthly_payment))
-	print('-'*40)
-	print("Total amount paid will be ${:,.2f}".format(total_amount))
-	''' result ...
-	For a 30 year mortgage loan of $100,000
-	at an annual interest rate of 7.50%
-	you pay $699.21 monthly
-	----------------------------------------
-	Total amount paid will be $251,717.22
-	'''
 
 
 
