@@ -13,14 +13,14 @@ class TestLoanCalculator(unittest.TestCase):
         self.lender_list.append( Lender("Jane", 0.069, 480) )
         self.lender_list.append( Lender("Mary", 0.104, 170) )
 
-    def test_loan_calculator(self):
+    def test_Given_Principal_When_Calculate_repayment_Then_Operation_ok(self):
         
         principal = 1000
         loan_calculator = LoanCalculator( self.lender_list )
         result = loan_calculator.calculate_repayment( principal )
         self.assertTrue(result)
 
-    def test_loan_calculator_below(self):
+    def test_Given_Principal_When_Below_limit_Then_Raise_exception(self):
         try:
             principal = 100
             loan_calculator = LoanCalculator( self.lender_list )
@@ -29,7 +29,7 @@ class TestLoanCalculator(unittest.TestCase):
         except ValueError:
             self.assertTrue(True)
     
-    def test_loan_calculator_exceed(self):
+    def test_Given_Principal_When_Exceed_limit_Then_Raise_exception(self):
         try:
             principal = 20000
             loan_calculator = LoanCalculator( self.lender_list )
@@ -38,7 +38,7 @@ class TestLoanCalculator(unittest.TestCase):
         except ValueError:
             self.assertTrue(True)
 
-    def test_loan_calculator_not_funds(self):
+    def test_Given_Principal_When_Not_enough_funds_Then_Raise_exception(self):
         try:
             principal = 5000
             loan_calculator = LoanCalculator( self.lender_list )
