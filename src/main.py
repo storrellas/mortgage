@@ -32,7 +32,7 @@ def calculate_figures( principal, filename ):
 if __name__ == "__main__":
 
 	principal = 1000
-	filename = "market_data.csv"
+	filename = "resources/market_data.csv"
 	# Grab command-line results
 	if len(sys.argv) >= 2:
 		filename = sys.argv[1]
