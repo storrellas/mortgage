@@ -26,7 +26,7 @@ class LoanCalculator:
         # Sort lender_list by interest to facilitate selection of lenders
         self.lender_list.sort(key=lambda x: x.interest)
         
-    def calculate_repayment_per_lender(self, principal, interest):
+    def __calculate_repayment_per_lender(self, principal, interest):
         '''
         given mortgage loan principal, interest(%) 
         calculate and return monthly payment amount per lender
@@ -41,7 +41,7 @@ class LoanCalculator:
         return payment
 
 
-    def calculate_selected_lenders(self, principal):
+    def __calculate_selected_lenders(self, principal):
         '''
         calculate list of selected_lenders according to principal
         '''
@@ -73,15 +73,16 @@ class LoanCalculator:
         
         self.principal = principal
         # Calculate Selected Lender_list
-        self.selected_lender_list = self.calculate_selected_lenders(principal)
+        self.selected_lender_list =  \
+            self.__calculate_selected_lenders(principal)
 
         
         # Calculate repayment
         self.payment_combined = 0.0
         self.average_interest = 0.0
         for lender in self.selected_lender_list:
-            payment = self.calculate_repayment_per_lender(lender.available, lender.interest)
-            #print "payment for " + lender.name +"; payment=" + str(payment)
+            payment = \
+                self.__calculate_repayment_per_lender(lender.available, lender.interest)
             self.payment_combined += payment
             self.average_interest += lender.interest
         self.average_interest = self.average_interest / len(self.selected_lender_list)
