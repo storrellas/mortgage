@@ -25,37 +25,42 @@ class Lender:
 			";interest=" + str(self.interest) + \
 			";capital="  + str(self.available)
 
-class LenderCSVReader:
+class LenderCSVLoader:
 	
 	filename = ""
+	lender_list = []
 	
 	def __init__(self, filename):
 		self.filename = filename
-		
+		self.lender_list = []
 		
 		# Read CSV
-		lender_list = []
-		with open('market_data.csv') as csvfile:
+		self.lender_list = []
+		with open(self.filename) as csvfile:
 		    readCSV = csv.reader(csvfile, delimiter=',')
 		    data_list = iter(readCSV)
 		    next(data_list)
 		    for row in data_list:
-			lender_list.append( Lender(row[0], float(row[1]), int(row[2]) ) )
+			self.lender_list.append( Lender(row[0], float(row[1]), int(row[2]) ) )
 	
 			print(row)
 			#print(row[0])
 			#print(row[0],row[1],row[2],)
 	
 		# Sort lender_list by interest
-		lender_list.sort(key=lambda x: x.interest)
-		print lender_list
+		self.lender_list.sort(key=lambda x: x.interest)
+		print self.lender_list
 
+	def get_lender_list(self):
+		return self.lender_list
 	
 
 class LoanCalculator:
 	# total number of payments		
 	n_payment = 36
 	lender_list = []
+	
+	principal = 0.0
 	
 	# Ouput
 	payment_combined = 0.0
@@ -81,7 +86,25 @@ class LoanCalculator:
 		return payment
 
 
-	def calculate_repayment(self):
+	def calculate_repayment(self, principal):
+		
+# 		self.principal = principal
+# 		# Calculate Selected Lender_list
+# 		selected_lender_list = []
+# 		for lender in self.lender_list:
+# 			if self.principal <= lender.available:
+# 				lender = Lender(lender.name, lender.interest, self.principal)
+# 				selected_lender_list.append ( lender )
+# 				break;
+# 			# Substract for next iteration
+# 			self.principal = self.principal - lender.available
+# 			selected_lender_list.append( lender )
+# 		print "++++++++++++++++++++"
+# 		print selected_lender_list
+# 		print len(selected_lender_list)
+# 		print "++++++++++++++++++++"
+		
+		# Calculate repayment
 		self.payment_combined = 0.0
 		self.average_interest = 0.0
 		for lender in self.lender_list:
@@ -105,31 +128,16 @@ class LoanCalculator:
 
 if __name__ == "__main__":
 
-	# Read CSV
-	lender_list = []
-	with open('market_data.csv') as csvfile:
-	    readCSV = csv.reader(csvfile, delimiter=',')
-	    data_list = iter(readCSV)
-	    next(data_list)
-	    for row in data_list:
-		lender_list.append( Lender(row[0], float(row[1]), int(row[2]) ) )
-
-		print(row)
-		#print(row[0])
-		#print(row[0],row[1],row[2],)
-
-	# Sort lender_list by interest
-	lender_list.sort(key=lambda x: x.interest)
-	print lender_list
-
-
+	print "LenderCSVLoader -------------------"
+	lender_loader = LenderCSVLoader('market_data.csv')
+	print "LenderCSVLoader -------------------"
 	
 	principal = 1000
 
 	print "++++++++++++++++"		
 	selected_lender_list = []
 	principal_local = principal
-	for lender in lender_list:
+	for lender in lender_loader.get_lender_list():
 		if principal_local <= lender.available:
 			lender = Lender(lender.name, lender.interest, principal_local)
 			selected_lender_list.append ( lender )
@@ -137,7 +145,7 @@ if __name__ == "__main__":
 		# Substract for next iteration
 		principal_local = principal_local - lender.available
 		selected_lender_list.append( lender )
-
+  
 	print selected_lender_list
 	print len(selected_lender_list)
 	print "++++++++++++++++"
@@ -145,7 +153,9 @@ if __name__ == "__main__":
 
 	print "-- Summary --"
 	loan_calculator = LoanCalculator(selected_lender_list)
-	loan_calculator.calculate_repayment()
+	#loan_calculator = LoanCalculator(lender_loader.get_lender_list())
+	
+	loan_calculator.calculate_repayment( principal )
 	print "Requested amount: " + str(principal)
 	print "Rate: " + str(loan_calculator.get_interest()*100) + "%"
 	print "Monthly repayment: " + str(loan_calculator.get_repayment())
