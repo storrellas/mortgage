@@ -23,6 +23,8 @@ class LenderCSVLoader:
         data_list = iter(readCSV)
         next(data_list)
         for row in data_list:
+            if len(row) != 3:
+                raise IOError("wrong column name")
             self.lender_list.append( Lender(row[0], float(row[1]), int(row[2]) ) )
 
   def get_lender_list(self):

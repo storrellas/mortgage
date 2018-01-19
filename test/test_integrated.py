@@ -13,11 +13,15 @@ class TestLoanCalculator(unittest.TestCase):
         self.assertTrue(loan_calculator.get_interest()*100 > 0)
 
 
+    def test_Given_NonExisting_file_When_Calculate_repayment_Then_Operation_fails(self):
+        pair = \
+            main.calculate_figures( 1000, "not_found_data.csv")
+        self.assertFalse(pair[0])
+
     def test_Given_Wrong_file_When_Calculate_repayment_Then_Operation_fails(self):
         pair = \
             main.calculate_figures( 1000, "wrong_data.csv")
         self.assertFalse(pair[0])
-
 
 if __name__ == '__main__':
     unittest.main()
