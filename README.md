@@ -21,7 +21,9 @@ inclusive. If the market does not have sufficient offers from lenders to satisfy
 system should inform the borrower that it is not possible to provide a quote at that time.
 The application should take arguments in the form:
 
+```
 cmd> [application] [marke_file] [loan_amount]
+```
 
 # Dependencies
 * Python 2.7
