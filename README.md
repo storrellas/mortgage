@@ -1,4 +1,4 @@
-#Description
+# Description
 This project contains the performance tests for the *CORE modules*.
 It is meant to figure out how to dimension an environment or to know the current concurrence limitations.
 
@@ -23,11 +23,13 @@ The application should take arguments in the form:
 
 cmd> [application] [marke_file] [loan_amount]
 
-#Dependencies
+# Dependencies
 * Python 2.7
 * VirtualEnv 1.11.4
 * nose
 
-#Usage
+# Usage
+```
 * Run application: python src/main.py [market_file] [loan_amount]
 * Run tests: pip install nose; nosetests
+```
